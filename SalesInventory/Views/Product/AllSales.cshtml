@@ -1,0 +1,86 @@
+﻿@{
+    ViewData["Title"] = "All";
+    List<ProductSalesModels> productSales = ViewBag.ProductSales;
+
+
+}
+
+
+
+
+<div>
+    <table class="table">
+        <tr>
+            <th>Product Name</th>
+            <th>Sold By</th>
+            <th>Quantity Sold</th>
+
+
+
+
+
+
+
+
+
+        </tr>
+
+
+
+        @foreach (var sale in productSales)
+        {
+            <tr>
+                <td>@sale.ProductName</td>
+                <td>@sale.SoldBy</td>
+                <td>@sale.QuantitySold</td>
+
+
+
+            </tr>
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </table>
+
+
+
+
+
+
+
+
+
+
+</div>
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            url: 'https://localhost:44378/Api/ProductApi/GenerateRandom',
+            type: 'GET',
+            dataType: 'json',
+           
+    });
+
+
+
+
+        })
+
+    
+
+</script>
+
+

@@ -1,0 +1,118 @@
+﻿@{
+    ViewData["Title"] = "All";
+    List<ProductModels> products = ViewBag.Products;
+
+
+}
+
+
+
+
+<div>
+    <table class="table" id="Ainz">
+        <tr>
+            <th>Product</th>
+            <th>Category</th>
+            <th>Cost(GHS)</th>
+            <th>Stock Available</th>
+            <th>Date Added</th>
+            <th>Action</th>
+        </tr>
+
+
+
+        @foreach (var product in products)
+        {
+            <tr>
+                <td>@product.ProductName</td> 
+                <td>@product.CategoryName</td> 
+                <td>@product.Cost</td> 
+                <td>@product.StockAvailable</td> 
+                <td>@product.CreatedAt</td>
+                <td><button type="button" class="btn btn-dark btn-sm" onclick="goToProductSales">View Sales</button></td>
+
+
+            </tr>
+        }
+
+        <!--
+                <tr>
+                    <th>Product</th>
+                    <th>Category</th>
+                    <th>Cost(GHS)</th>
+                    <th>Stock Available</th>
+                    <th>Date Added</th>
+                </tr>
+    -->
+    </table>
+
+
+
+
+
+
+
+
+</div>
+@section Scripts {
+    <script>
+
+        function goToProductSales(productId) {
+            alert(productId);
+
+        }
+        function pageRedirect() {
+            window.location.href = "https://www.tutorialrepublic.com/";
+        /*
+        $(document).ready(function () {
+            $.ajax({
+                url: 'https://localhost:44378/Api/ProductApi/GetAllProducts',
+                type: 'GET',
+                dataType: 'json',
+                
+                success: function (data, status, xhr) {   // success callback function
+                    console.log("All Products", data);
+                    var m = $('#Ainz');
+                    data.forEach(function (dataRow) {
+                        var tableRow = `
+                        <tr>
+                            <td> ${dataRow.productName}</td>
+                            <td> ${dataRow.categoryName}</td>
+                            <td> ${dataRow.cost}</td>
+                            <td> ${dataRow.stockAvailable}</td>
+                            <td> ${dataRow.createdAt}</td>
+
+                        </tr>
+                        `
+
+                                                m.append(tableRow);
+                    });
+                  
+                        
+                        //$("#m").append("<td>"+data.productName+ "</td">);
+
+                    //})
+                    //$('p').append(data.productName + ' ' + data.middleName + ' ' + data.lastName);
+                },
+                error: function (jqXhr, textStatus, errorMessage) { // error callback 
+                    $('p').append('Error: ' + errorMessage);
+                }
+
+
+
+
+            });
+
+
+
+
+        })
+        */
+
+
+
+    </script>
+
+}
+
+

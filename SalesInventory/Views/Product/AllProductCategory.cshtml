@@ -1,0 +1,62 @@
+﻿@{
+    ViewData["Title"] = "All";
+    List<ProductCategoryModels> products = ViewBag.ProductCategory;
+
+
+}
+
+
+
+
+<div>
+    <table class="table">
+        <tr>
+            <th>CategoryName</th>
+            
+
+
+
+
+
+
+
+
+        </tr>
+
+
+
+        @foreach (var product in products)
+        {
+            <tr>
+                <td>@product.CategoryName</td>
+              
+
+            </tr>
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </table>
+
+
+
+
+
+
+
+
+
+
+</div>
