@@ -155,6 +155,60 @@ namespace SalesInventory.Data.DbContext
 
         }
 
+        public string  InsertSale(int productId, int quantitySold, double totalAmount, string soldBy)
+        {
+            string  dbResponse = string.Empty;
+            var dbCon = CreateConnection();
+            try
+            {
+                using (dbCon)
+                {
+                    dbCon.Open();
+                    dbResponse = dbCon.QueryFirstOrDefault<string>("\"InsertSale\"", new
+                    {
+                        _productId = productId,
+                        _quantitySold = quantitySold,
+                        _totalAmount = totalAmount,
+                        _soldBy = soldBy
+                    }, commandType: CommandType.StoredProcedure);
+                }
+                DisposeConnection(dbCon);
+                return (string) dbResponse;
+            }
+            catch (Exception ex)
+            {
+                DisposeConnection(dbCon);
+
+                //_logger.LogError(ex);
+                return (string)dbResponse;
+            }
+
+        }
+
+        public ProductModels GetProductById(int productId)
+        {
+            ProductModels allProducts = new ProductModels();
+            var dbCon = CreateConnection();
+            try
+            {
+                using (dbCon)
+                {
+                    dbCon.Open();
+                    allProducts = dbCon.QueryFirst<ProductModels>("\"GetProductById\"", new { _productId = productId }, commandType: CommandType.StoredProcedure);
+                }
+                DisposeConnection(dbCon);
+                return (ProductModels)allProducts;
+            }
+            catch (Exception ex)
+            {
+                DisposeConnection(dbCon);
+
+                //_logger.LogError(ex);
+                return (ProductModels)allProducts;
+            }
+
+        }
+
 
 
     }

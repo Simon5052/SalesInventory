@@ -12,26 +12,29 @@ namespace SalesInventory.Controllers
 {
     public class ProductController : Controller
     {
+        private readonly DbHelper _dbHelper;
+        public ProductController(DbHelper dbHelper)
+        {
+            _dbHelper = dbHelper;
+
+        }
         
         
         public IActionResult All()
         {
-            DbHelper dbHelper = new DbHelper();
-            ViewBag.Products = dbHelper.GetAllProducts();
+            ViewBag.Products = _dbHelper.GetAllProducts();
             return View();
         }
 
         public IActionResult AllProductCategory()
         {
-            DbHelper dbHelper = new DbHelper();
-            ViewBag.ProductCategory = dbHelper.GetAllProductCategories();
+            ViewBag.ProductCategory = _dbHelper.GetAllProductCategories();
             return View();
         }
 
         public IActionResult AllSales()
         {
-            DbHelper dbHelper = new DbHelper();
-            ViewBag.ProductSales = dbHelper.GetAllSales();
+            ViewBag.ProductSales = _dbHelper.GetAllSales();
             return View();
         }
         

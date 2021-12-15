@@ -1,14 +1,17 @@
 ﻿@{
     ViewData["Title"] = "All";
     List<ProductModels> products = ViewBag.Products;
+    
 
 
 }
 
 
-
+<h4>All Products</h4>
+<br />
 
 <div>
+    
     <table class="table" id="Ainz">
         <tr>
             <th>Product</th>
@@ -28,22 +31,12 @@
                 <td>@product.CategoryName</td> 
                 <td>@product.Cost</td> 
                 <td>@product.StockAvailable</td> 
-                <td>@product.CreatedAt</td>
-                <td><button type="button" class="btn btn-dark btn-sm" onclick="goToProductSales">View Sales</button></td>
+                <td>@product.CreatedAt.ToString("dd-MMM-yyyy hh:mm tt")</td>
+                <td><button type="button" class="btn btn-dark btn-sm" onclick="pageRedirect(@product.ProductId)">Record Sales</button></td>
 
 
             </tr>
         }
-
-        <!--
-                <tr>
-                    <th>Product</th>
-                    <th>Category</th>
-                    <th>Cost(GHS)</th>
-                    <th>Stock Available</th>
-                    <th>Date Added</th>
-                </tr>
-    -->
     </table>
 
 
@@ -55,14 +48,12 @@
 
 </div>
 @section Scripts {
-    <script>
+    <script>    
+        function pageRedirect(productId) {
+            window.location = `https://localhost:44378/Sales/RecordSales?productId=${productId}`;
 
-        function goToProductSales(productId) {
-            alert(productId);
 
         }
-        function pageRedirect() {
-            window.location.href = "https://www.tutorialrepublic.com/";
         /*
         $(document).ready(function () {
             $.ajax({

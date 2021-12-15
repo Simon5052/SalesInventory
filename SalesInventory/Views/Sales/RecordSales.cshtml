@@ -1,0 +1,193 @@
+﻿
+@{
+    ViewData["Title"] = "Product Sales";
+    List<ProductSalesModels> sales = ViewBag.ProductSales;
+    var products = ViewBag.GetProductById;
+}
+
+<h3>Product Sales</h3>
+<br />
+@{
+    <div class="row">
+        <div class="col-6">
+            <p id="pName"><strong>Product Name :</strong>@products.ProductName</p>
+            <p id="pCategory"><strong>Product Category :</strong> @products.CategoryName</p>
+            <p id="pStockAvailable"><strong>Stock Available :</strong> @products.StockAvailable</p>
+
+        </div>
+    </div>
+}
+
+
+
+
+
+<br />
+<br />
+<form @*method="post"*@ @*asp-controller="ProductApi" asp-action="InsertSales"*@ id="myForm">
+    <div class="row">
+        <div class="col-3">
+            <label class="form-label">Quantity Sold</label>
+            <input class="form-control" id="QuantitySold" name="QuantitySold">
+        </div>
+        <div class="col-3">
+            <label class="form-label">Sold By</label>
+            <input class="form-control" name="SoldBy" id="SoldBy">
+
+        </div>
+        <div class="col-3">
+            <label class="form-label"></label>
+            <input class="col" name="ProductId" style="display:none" value='@ViewBag.ProductId' />
+            <button class="btn btn-primary mb-2 form-control" type="submit" id="submit">Record Sales</button>
+
+
+        </div>
+
+
+    </div>
+</form>
+
+@*<form method="post" asp-controller="Sales" asp-action="RecordSales">
+        <div class="row">
+            <div class="col-3">
+                <label class="form-label">Quantity Sold</label>
+                <input class="form-control" id="QuantitySold" name="QuantitySold">
+            </div>
+            <div class="col-3">
+                <label class="form-label">Sold By</label>
+                <input class="form-control" name="SoldBy" id="SoldBy">
+
+            </div>
+            <div class="col-3">
+                <label class="form-label"></label>
+                <input class="col" name="ProductId" style="display:none" value='@ViewBag.ProductId' />
+                <button class="btn btn-primary mb-2 form-control" type="submit">Record Sales</button>
+
+
+            </div>
+
+
+        </div>
+    </form>*@
+
+
+<br />
+<br />
+
+
+
+
+
+
+<table class="table">
+    <tr>
+        <th>Product</th>
+        <th>Total Amount</th>
+        <th>Sold By</th>
+        <th>Sold At</th>
+        <th>Quantity Sold</th>
+    </tr>
+
+
+
+    @foreach (var sale in sales)
+    {
+
+        <tr>
+            <td>@sale.ProductName</td>
+            <td>@sale.TotalAmount</td>
+            <td>@sale.SoldBy</td>
+            <td>@sale.CreatedAt.ToString("dd-MMM-yyyy hh:mm tt")</td>
+            <td>@sale.QuantitySold</td>
+        </tr>
+    }
+
+</table>
+
+
+</div>
+@section Scripts {
+    <script>
+
+        //$(document).ready(function () {
+        //    $.ajax({
+        //        url: `/Api/ProductApi/GetProductById?productId=${productId}`,
+        //        type: 'GET',
+        //        dataType: 'json',
+
+        //        success: function (data, status, xhr) {   // success callback function
+        //            console.log("All Products By Id", data);
+        //            var m = $('#Ainz');
+        //            data.forEach(function (dataRow) {
+        //                var tableRow = `
+        //                <tr>
+        //                    <td> ${dataRow.productName}</td>
+        //                    <td> ${dataRow.categoryName}</td>
+        //                    <td> ${dataRow.stockAvailable}</td>
+
+        //                </tr>
+        //                `
+
+        //                                        m.append(tableRow);
+        //            });
+
+
+        //                //$("#m").append("<td>"+data.productName+ "</td">);
+
+        //            //})
+        //            //$('p').append(data.productName + ' ' + data.middleName + ' ' + data.lastName);
+        //        },
+        //        error: function (jqXhr, textStatus, errorMessage) { // error callback
+        //            $('p').append('Error: ' + errorMessage);
+        //        }
+
+
+
+
+        //    });
+
+
+
+
+        /*  })*/
+        $(document).ready(function () {
+            $('#myForm').submit(function (e) {
+                e.preventDefault();
+
+                var requestPayload = {
+                    "QuantitySold": $('#QuantitySold').val(),
+                    "SoldBy": $('#SoldBy').val(),
+                    "Productid" : '@ViewBag.ProductId'
+                };
+
+                $.ajax({
+                    url: `/Api/ProductApi/InsertSales`,
+                    type: 'POST',
+                    data: JSON.stringify(requestPayload),
+                    contentType : 'application/json',
+                    success: function (data, status, xhr) {
+                        if (data == "succesful") {
+                            alert("Product sales recorded succesfully");
+                            location.reload();
+                            
+                        }
+                        console.log(data);
+                    },
+                    error: function ( error) {
+                        alert(error.responseText);
+
+                            }
+                    });
+            });
+
+
+        })
+
+
+
+
+    </script>
+
+}
+
+
