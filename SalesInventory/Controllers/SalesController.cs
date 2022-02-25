@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Kendo.Mvc.Extensions;
+using Kendo.Mvc.UI;
+using Microsoft.AspNetCore.Mvc;
 using SalesInventory.Data.DbContext;
 using SalesInventory.Models;
 using SalesInventory.Models.InputModels;
@@ -20,7 +22,7 @@ namespace SalesInventory.Controllers
         }
         public IActionResult RecordSales(int productId)
         {
-            ViewBag.ProductSales = _dbHelper.GetAllSalesById(productId);
+            ViewBag.ProductSales = _dbHelper.GetAllSalesByProductId(productId);
             ViewBag.ProductId = productId;
             ViewBag.Products = _dbHelper.GetAllProducts();
             ViewBag.GetProductById = _dbHelper.GetProductById(productId);
@@ -35,6 +37,15 @@ namespace SalesInventory.Controllers
             var totalAmount = product.Cost * addSales.QuantitySold;
             var insertSale = _dbHelper.InsertSale(addSales.ProductId, addSales.QuantitySold, totalAmount, addSales.SoldBy);
             return RedirectToAction("RecordSales", "Sales", new { productId = product.ProductId });
+        }
+
+        [HttpPost]
+        public IActionResult ProductSales_Read([DataSourceRequest] DataSourceRequest request, int productId)
+        {
+            
+            
+            var data = _dbHelper.GetAllSalesByProductId(productId);
+            return Json(data.ToDataSourceResult(request));
         }
 
 

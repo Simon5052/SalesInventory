@@ -54,7 +54,7 @@ namespace SalesInventory.Controllers.API
         [Route("GetAllSalesById")]
         public IActionResult GetAllSalesByProductId(int productId)
         {
-            var products = _dbHelper.GetAllSalesById(productId);
+            var products = _dbHelper.GetAllSalesByProductId(productId);
             return Ok(products);
         }
 

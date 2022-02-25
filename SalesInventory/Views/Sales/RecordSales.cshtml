@@ -5,8 +5,13 @@
     var products = ViewBag.GetProductById;
 }
 
+
+
 <h3>Product Sales</h3>
 <br />
+
+
+
 @{
     <div class="row">
         <div class="col-6">
@@ -106,6 +111,78 @@
 
 
 </div>
+
+<div>
+    @(Html.Kendo().Grid<ProductSalesModels>()
+.Name("productSalesGrid")
+.Columns(columns =>
+{
+    columns.Bound(c => c.ProductName).Title("Product Name").Width(190);
+    columns.Bound(c => c.TotalAmount).Title("Total Amount").Width(190);
+    columns.Bound(c => c.SoldBy).Title("Sold By").Width(190);
+    columns.Bound(c => c.CreatedAt).Title("Sold At").Width(190);
+    columns.Bound(c => c.QuantitySold).Title("Quantity Sold").Width(190);
+
+
+
+
+    columns.Command(c =>
+    {
+        c.Edit();
+        c.Destroy();
+    }).Width(200);
+
+
+
+})
+
+
+
+.ToolBar(tools => { tools.Create().Text("Add Product Sales Category"); tools.Excel(); tools.Pdf(); })
+.Excel(excel => excel
+.FileName("ProductSales.xlsx")
+.Filterable(true)
+)
+.Pdf(pdf => pdf
+.FileName("ProductSales.pdf")
+)
+.Scrollable(s => s.Height("auto"))
+.Groupable()
+.Editable(e => e.Mode(GridEditMode.PopUp))
+.Sortable()
+.Filterable(f => f.Enabled(true).Operators(o =>
+{
+    o.ForDate(t =>
+    {
+        t.Clear();
+        t.IsGreaterThan("Start Date");
+        t.IsLessThan("End Date");
+    });
+})
+)
+.Pageable(pageable => pageable
+.Refresh(true)
+.PageSizes(true)
+.ButtonCount(3).PageSizes(new int[] { 10, 100, 1000 }))
+.DataSource(dataSource => dataSource
+.Ajax()
+.PageSize(100)
+.Model(m => m.Id(p=>p.ProductId))
+.Events(events =>
+{
+    events.Error("error_handler");
+})
+.Read(read => read.Action("ProductSales_Read", "Sales", new { productId = @ViewBag.ProductId}))
+.Create(c => c.Action("User_Add", "Users"))
+.Update(c => c.Action("User_Update", "Users"))
+.Destroy(c => c.Action("User_Update", "Users"))
+
+
+
+)
+)
+</div>
+
 @section Scripts {
     <script>
 
@@ -184,6 +261,30 @@
         })
 
 
+
+
+    </script>
+     <script>
+        function error_handler(e) {
+            try {
+                var errorMessage = "";
+                if (e && e.xhr) {
+                    var errorMessage = e.xhr.responseText;
+                }
+
+
+
+                if (errorMessage) {
+                    alert(errorMessage);
+                }
+
+
+
+            } catch (e) {
+                console.log(e);
+                alert("Oops! An error occurred while processing your request");
+            }
+        }
 
 
     </script>

@@ -1,7 +1,7 @@
 ﻿@{
     ViewData["Title"] = "All";
-    List<ProductModels> products = ViewBag.Products;
-    
+    //List<ProductModels> products = ViewBag.Products;
+
 
 
 }
@@ -12,7 +12,7 @@
 
 <div>
     
-    <table class="table" id="Ainz">
+    @*<table class="table" id="Ainz">
         <tr>
             <th>Product</th>
             <th>Category</th>
@@ -37,7 +37,7 @@
 
             </tr>
         }
-    </table>
+    </table>*@
 
 
 
@@ -47,6 +47,80 @@
 
 
 </div>
+<div>
+    @(Html.Kendo().Grid<ProductModels>()
+.Name("productGrid")
+.Columns(columns =>
+{
+    columns.Bound(c => c.ProductName).Title("Product Name").Width(190);
+    columns.Bound(c => c.CategoryName).Title("Category Name").Width(190);
+    columns.Bound(c => c.Cost).Title("Cost").Width(190);
+    columns.Bound(c => c.StockAvailable).Title("Stock Available").Width(190);
+    columns.Bound(c => c.CreatedAt).Title("Date Added").Width(190).Format("{0: dd-MMM-yyyy hh:mm tt }");
+
+
+
+
+    columns.Command(c =>
+    {
+        c.Edit();
+        c.Destroy();
+    }).Width(200);
+
+
+
+})
+
+
+
+.ToolBar(tools => { tools.Create().Text("Add Product "); tools.Excel(); tools.Pdf(); })
+.Excel(excel => excel
+.FileName("Product.xlsx")
+.Filterable(true)
+)
+.Pdf(pdf => pdf
+.FileName("Product.pdf")
+)
+.Scrollable(s => s.Height("auto"))
+.Groupable()
+.Editable(e => e.Mode(GridEditMode.PopUp).TemplateName("ProductManagerEditor").Window(w => { w.Title("Add Project Manager"); }))
+    .Sortable()
+    .Filterable(f => f.Enabled(true).Operators(o =>
+    {
+    o.ForDate(t =>
+    {
+    t.Clear();
+    t.IsGreaterThan("Start Date");
+    t.IsLessThan("End Date");
+    });
+    })
+    )
+    .Pageable(pageable => pageable
+    .Refresh(true)
+    .PageSizes(true)
+    .ButtonCount(3).PageSizes(new int[] { 10, 100, 1000 }))
+    .DataSource(dataSource => dataSource
+    .Ajax()
+    .PageSize(100)
+    .Model(m => m.Id(p => p.ProductId))
+    .Events(events =>
+    {
+    events.Error("error_handler");
+    })
+    .Read(read => read.Action("Product_Read", "Product"))
+    .Create(c => c.Action("Product_Add", "Product"))
+    .Update(c => c.Action("Product_Update", "Product"))
+    .Destroy(c => c.Action("Product_Delete", "Product"))
+
+
+
+    )
+    )
+
+</div>
+
+
+
 @section Scripts {
     <script>    
         function pageRedirect(productId) {
@@ -100,6 +174,48 @@
         })
         */
 
+
+
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('#productGrid').data('kendoGrid').dataSource.transport.options.create.complete = function (e) {
+                if (e.status == 200) {
+                    $('#productGrid').data('kendoGrid').dataSource.read();
+                }
+            };
+
+
+
+            $('#productGrid').data('kendoGrid').dataSource.transport.options.update.complete = function (e) {
+                if (e.status == 200) {
+                    $('#productGrid').data('kendoGrid').dataSource.read();
+                }
+            };
+
+
+
+        });
+        function error_handler(e) {
+            try {
+                var errorMessage = "";
+                if (e && e.xhr) {
+                    var errorMessage = e.xhr.responseText;
+                }
+
+
+
+                if (errorMessage) {
+                    alert(errorMessage);
+                }
+
+
+
+            } catch (e) {
+                console.log(e);
+                alert("Oops! An error occurred while processing your request");
+            }
+        }
 
 
     </script>

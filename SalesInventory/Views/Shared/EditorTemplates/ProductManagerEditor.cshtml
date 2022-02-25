@@ -1,0 +1,48 @@
+﻿@model ProductModels
+
+<form>
+
+    @Html.HiddenFor(model => model.CreatedAt)
+    @Html.HiddenFor(model => model.ProductId)
+    @Html.HiddenFor(model => model.CategoryName)
+
+    <br />
+    <div class="k-edit-label">
+        <label>Product:<sup class="text-danger">*</sup></label>
+    </div>
+    <div class="k-edit-field">
+        @Html.Kendo().TextBoxFor(m => m.ProductName)
+    </div>
+    <br />
+
+    <div class="k-edit-label">
+        <label>Category:<sup class="text-red">*</sup></label>
+    </div>
+    <div class="k-edit-field">
+        @Html.Kendo().DropDownListFor(m => m.ProductCategoryId).DataSource(d => d.Read("AllCategory", "Product")).OptionLabel("-- Select Category --").DataTextField("CategoryName").DataValueField("ProductCategoryId")
+    </div>
+    <br />
+
+    <div class="k-edit-label">
+        <label>Stock Available:</label>
+    </div>
+    <div class="k-edit-field">
+        @Html.Kendo().TextBoxFor(m => m.StockAvailable)
+    </div>
+    <br />
+
+    <div class="k-edit-label">
+        <label>Price:</label>
+    </div>
+    <div class="k-edit-field">
+        @Html.Kendo().TextBoxFor(m => m.Cost)
+    </div>
+
+
+
+
+</form>
+
+<style>
+    
+</style>

@@ -3,5 +3,101 @@
     ViewData["Title"] = "Product Category";
 }
 
-<h1>Product Category</h1>
+<h4>Product Category</h4>
+
+
+<div>
+    @(Html.Kendo().Grid<ProductCategoryModels>()
+.Name("productCategoryGrid")
+.Columns(columns =>
+{
+columns.Bound(c => c.CategoryName).Title("Category Name").Width(190);
+
+
+
+
+columns.Command(c =>
+{
+c.Edit();
+    c.Destroy();
+}).Width(200);
+
+
+
+})
+
+
+
+.ToolBar(tools => { tools.Create().Text("Add Product Category"); tools.Excel(); tools.Pdf(); })
+.Excel(excel => excel
+.FileName("ProductCategory.xlsx")
+.Filterable(true)
+)
+.Pdf(pdf => pdf
+.FileName("ProductCategory.pdf")
+)
+.Scrollable(s => s.Height("auto"))
+.Groupable()
+.Editable(e => e.Mode(GridEditMode.PopUp))
+.Sortable()
+.Filterable(f => f.Enabled(true).Operators(o =>
+{
+o.ForDate(t =>
+{
+t.Clear();
+t.IsGreaterThan("Start Date");
+t.IsLessThan("End Date");
+});
+})
+)
+.Pageable(pageable => pageable
+.Refresh(true)
+.PageSizes(true)
+.ButtonCount(3).PageSizes(new int[] { 10, 100, 1000 }))
+.DataSource(dataSource => dataSource
+.Ajax()
+.PageSize(100)
+.Model(m => m.Id(p => p.ProductCategoryId))
+.Events(events =>
+{
+events.Error("error_handler");
+})
+.Read(read => read.Action("ProductCategory_Read", "ProductCategory"))
+.Create(c => c.Action("User_Add", "Users"))
+.Update(c => c.Action("User_Update", "Users"))
+.Destroy(c => c.Action("User_Update", "Users"))
+
+
+
+)
+)
+</div>
+@section Scripts{
+
+    <script>
+        function error_handler(e) {
+            try {
+                var errorMessage = "";
+                if (e && e.xhr) {
+                    var errorMessage = e.xhr.responseText;
+                }
+
+
+
+                if (errorMessage) {
+                    alert(errorMessage);
+                }
+
+
+
+            } catch (e) {
+                console.log(e);
+                alert("Oops! An error occurred while processing your request");
+            }
+        }
+
+
+    </script>
+}
+
 

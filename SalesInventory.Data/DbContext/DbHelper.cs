@@ -131,7 +131,7 @@ namespace SalesInventory.Data.DbContext
 
         }
 
-        public List<ProductSalesModels> GetAllSalesById(int productId)
+        public List<ProductSalesModels> GetAllSalesByProductId(int productId)
         {
             List<ProductSalesModels> allProducts = new List<ProductSalesModels>();
             var dbCon = CreateConnection();
@@ -205,6 +205,97 @@ namespace SalesInventory.Data.DbContext
 
                 //_logger.LogError(ex);
                 return (ProductModels)allProducts;
+            }
+
+        }
+
+        public string InsertProduct(string productName, int productCategoryId, int stockAvailable, double cost)
+        {
+            string dbResponse = string.Empty;
+            var dbCon = CreateConnection();
+            try
+            {
+                using (dbCon)
+                {
+                    dbCon.Open();
+                    dbResponse = dbCon.QueryFirstOrDefault<string>("\"InsertProduct\"", new
+                    {
+                        _productName = productName,
+                        _productCategoryId = productCategoryId,
+                        _stockAvailable = stockAvailable,
+                        _cost = cost
+                    }, commandType: CommandType.StoredProcedure);
+                }
+                DisposeConnection(dbCon);
+                return (string)dbResponse;
+            }
+            catch (Exception ex)
+            {
+                DisposeConnection(dbCon);
+
+                //_logger.LogError(ex);
+                return (string)dbResponse;
+            }
+
+        }
+
+        public string DeleteProduct( int productId)
+        {
+            string dbResponse = string.Empty;
+            var dbCon = CreateConnection();
+            try
+            {
+                using (dbCon)
+                {
+                    dbCon.Open();
+                    dbResponse = dbCon.QueryFirstOrDefault<string>("\"DeleteProduct\"", new
+                    {
+                        _productId = productId,
+                        
+                    }, commandType: CommandType.StoredProcedure);
+                }
+                DisposeConnection(dbCon);
+                return (string)dbResponse;
+            }
+            catch (Exception ex)
+            {
+                DisposeConnection(dbCon);
+
+                //_logger.LogError(ex);
+                return (string)dbResponse;
+            }
+
+        }
+
+        public string UpdateProduct(int productId, string productName, int productCategoryId, double cost, int stockAvailable)
+        {
+            string dbResponse = string.Empty;
+            var dbCon = CreateConnection();
+            try
+            {
+                using (dbCon)
+                {
+                    dbCon.Open();
+                    dbResponse = dbCon.QueryFirstOrDefault<string>("\"UpdateProduct\"", new
+                    {
+                        _productId = productId,
+                        _productName = productName,
+                        _productCategoryId = productCategoryId,
+                        _cost = cost,
+                        _stockAvailable = stockAvailable
+
+
+                    }, commandType: CommandType.StoredProcedure);
+                }
+                DisposeConnection(dbCon);
+                return (string)dbResponse;
+            }
+            catch (Exception ex)
+            {
+                DisposeConnection(dbCon);
+
+                //_logger.LogError(ex);
+                return (string)dbResponse;
             }
 
         }
