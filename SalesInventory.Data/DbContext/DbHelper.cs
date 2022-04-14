@@ -18,6 +18,8 @@ namespace SalesInventory.Data.DbContext
         public string dbSchema = "public";
 
 
+
+        // Is the getconnectionstringmethod and the get schema useless
         private string GetConnectionString(IConfiguration configuration)
         {
 
